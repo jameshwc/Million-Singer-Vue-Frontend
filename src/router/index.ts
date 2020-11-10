@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/Tour/:TourID',
     name: 'Tournament',
-    component: () => import('../views/Tournament.vue')
+    component: () => import('../views/Game.vue')
   }
 ]
 

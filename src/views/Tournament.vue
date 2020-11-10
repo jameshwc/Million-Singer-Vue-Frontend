@@ -16,6 +16,7 @@ export default {
   created: function(){
     this.fetchCollects();
   },
+  
 methods: {
   fetchCollects() {
     let self = this;

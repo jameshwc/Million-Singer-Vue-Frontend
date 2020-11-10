@@ -36,7 +36,7 @@ methods: {
     fetch("http://ms.csie.org/api/game/collects/"+collectID).
       then(response => response.json()).then(responseJson=>{
         this_.collect = responseJson.data;
-        this.$emit("play", this.collect);
+        this_.$emit("play", this_.collect);
       })
   }
 }, 

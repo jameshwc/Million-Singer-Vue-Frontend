@@ -4,8 +4,12 @@
         <h2>{{song.name}} - {{song.singer}} </h2>
         <div id="player"></div>
         <button v-if="isNotStart" @click="playVideo">play</button>
+        <h4>{{prevLine}}</h4>
         <h2>{{line}}</h2>
-        </center>
+        <h4>{{nextLine}}</h4>
+        <button v-if="missLyrics" @click="showMissLyrics">Show Answer</button><br><br>
+        <button v-if="continuePlay" @click="continuePlaying"> Continue Playing </button>
+      </center>
     </div>
 </template>
 <script>
@@ -15,7 +19,13 @@ export default {
     return {
       player: null,
       isNotStart: true,
-      line: "You haven't played the video yet."
+      prevLine: "",
+      line: "You haven't played the video yet.",
+      nextLine: "",
+      missLyrics: false,
+      continuePlay: false,
+      afterMissLyrics: false,
+      answerLine: "",
     }
   },
   created:function(){
@@ -38,6 +48,9 @@ export default {
         width: 600,
         height: 400,
         videoId: this.song.video_id,
+        playerVars: {
+          'cc_load_policy': 0,
+        },
         events: {
           onReady: _.onPlayerReady,
           onStateChange: _.onPlayerStateChange,
@@ -48,8 +61,8 @@ export default {
     onPlayerReady() {
       this.player.playVideo();
       this.line = "♪♪ Music ♪♪";
-      console.log(this.song.miss_lyric_id);
-      console.log(this.song.lyrics[this.song.miss_lyric_id]);
+      this.nextLine = this.song.lyrics[0].line;
+      this.answerLine = this.renderHiddenAnswerLine(this.song.lyrics[Number(this.song.miss_lyric_id)].line);
       this.showTime();
     },
     onPlayerStateChange() {
@@ -59,26 +72,59 @@ export default {
       console.log("pause video")
       this.player.pauseVideo();
     },
+    isPause(){
+      return this.player.getPlayerState() == 2;
+    },
+    showMissLyrics(){
+      this.line = this.song.lyrics[Number(this.song.miss_lyric_id)].line;
+      this.missLyrics = false;
+    },
     showTime(){
       setInterval(() => {
-        var currentTime = this.player.getCurrentTime() * 1000;
-        var idx = -1;
-        for(var i = 0; i < this.song.lyrics.length; i++){
-          if(currentTime >= this.song.lyrics[i].start_time && currentTime < this.song.lyrics[i].end_time){
-            idx = i;
-            break;
+        if(!this.isPause()){
+          var currentTime = this.player.getCurrentTime() * 1000;
+          var idx = -1;
+          for(var i = 0; i < this.song.lyrics.length; i++){
+            if(currentTime >= this.song.lyrics[i].start_time && currentTime < this.song.lyrics[i].end_time){
+              idx = i;
+              break;
+            }
+          }
+          
+          if(idx >= 0){
+            this.prevLine = this.song.lyrics[idx-1].line || "";
+            this.line = this.song.lyrics[idx].line;
+            this.nextLine = this.song.lyrics[idx+1].line || "";
+            if(idx+1 == this.song.miss_lyric_id){
+              this.nextLine = this.answerLine;
+            }
+          }
+          if (!this.afterMissLyrics && idx == this.song.miss_lyric_id) {
+            this.missLyrics = true;
+            this.continuePlay = true;
+            this.line = this.answerLine;
+            this.pauseVideo();
           }
         }
-        
-        if(idx < this.song.miss_lyric_id && idx >= 0){
-          this.line = this.song.lyrics[idx].line;
-        } else if (idx == this.song.miss_lyric_id) {
-          let miss_lyric_id = Number(this.song.miss_lyric_id);
-          this.line = "\u2B50".repeat(this.song.lyrics[miss_lyric_id].line.length);
-          this.pauseVideo();
-        }
       }, 10);
-    }   
+    },
+    renderHiddenAnswerLine(cur_line){
+      var line = "";
+      for(var i = 0; i < cur_line.length; i++){
+        if(cur_line[i] != " ") {
+          line += "\u2B50";
+        } else {
+          line += " ";
+        }
+      }
+      return line;
+    },
+    continuePlaying(){
+      this.continuePlay = false;
+      this.player.playVideo();
+      this.showTime();
+      this.afterMissLyrics = true;
+    },
   },
   computed: {
   },

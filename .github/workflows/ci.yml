@@ -20,10 +20,6 @@ jobs:
         npm run build
      
     - name: Deploy
-      with:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-        HOST: ${{ secrets.HOST }}
-        FOLDER: dist
       run: |
         mkdir -p .ssh
         chmod 700 .ssh

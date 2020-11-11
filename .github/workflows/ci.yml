@@ -23,12 +23,12 @@ jobs:
       run: |
         mkdir -p .ssh
         chmod 700 .ssh
-        echo "$SSH_KEY" >> .ssh/rsa
+        echo "${{ secrets.SSH_KEY }}" >> .ssh/rsa
         chmod 700 .ssh/rsa
-        sftp -o StrictHostKeyChecking=no -i .ssh/rsa $HOST "
+        sftp -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} "
         put -r dist million-singer/
         "
-        ssh -o StrictHostKeyChecking=no -i .ssh/rsa $HOST -tt "
+        ssh -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} -tt "
         cd million-singer
         docker-build -d --build
         rm -rf dist

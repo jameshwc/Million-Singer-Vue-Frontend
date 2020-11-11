@@ -10,6 +10,7 @@
 import Collect from "./Collect"
 import Tournament from "./Tournament"
 import Song from "./Song"
+
 export default {
   data: function() {
     return {

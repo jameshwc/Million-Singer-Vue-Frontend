@@ -26,7 +26,7 @@ jobs:
         echo "$SSH_KEY" >> .ssh/rsa
         chmod 700 .ssh/rsa
         sftp -o StrictHostKeyChecking=no -i .ssh/rsa $HOST "
-        put -r $FOLDER million-singer/
+        put -r dist million-singer/
         "
         ssh -o StrictHostKeyChecking=no -i .ssh/rsa $HOST -tt "
         cd million-singer

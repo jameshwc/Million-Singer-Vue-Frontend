@@ -25,7 +25,7 @@ jobs:
         chmod 700 .ssh
         echo "$SSH_KEY" >> .ssh/rsa
         chmod 700 .ssh/rsa
-        sftp -o StrictHostKeyChecking=no -i .ssh/rsa $HOST -tt "
+        sftp -o StrictHostKeyChecking=no -i .ssh/rsa $HOST "
         put -r $FOLDER million-singer/
         "
         ssh -o StrictHostKeyChecking=no -i .ssh/rsa $HOST -tt "

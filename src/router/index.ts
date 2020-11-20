@@ -20,7 +20,12 @@ const routes = [
     path: '/Edit',
     name: 'Edit',
     component: () => import('../views/admin/admin.vue')
-  }
+  },
+  {
+    path: '/Edit/Song',
+    name: 'Song Edit',
+    component: () => import('../views/admin/song.vue')
+  },
 ]
 
 const router = createRouter({

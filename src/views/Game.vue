@@ -1,39 +1,40 @@
 <template>
   <div>
     <Song v-if="playSong" :song="song"> </Song>
-    <Collect v-else-if="playCollect" :collect="collect" @play="updatePlaySong"> </Collect>
+    <Collect v-else-if="playCollect" :collect="collect" @play="updatePlaySong">
+    </Collect>
     <Tournament v-else @play="updatePlayCollect"></Tournament>
-    </div>
+  </div>
 </template>
 
 <script>
-import Collect from "./Collect"
-import Tournament from "./Tournament"
-import Song from "./Song"
+import Collect from './Collect'
+import Tournament from './Tournament'
+import Song from './Song'
 
 export default {
   data: function() {
     return {
       playCollect: false,
-      playSong: false,
+      playSong: false
     }
   },
-  
-methods: {
-  updatePlayCollect(collect) {
-      this.playCollect = true;
-      this.collect = collect;
+
+  methods: {
+    updatePlayCollect(collect) {
+      this.playCollect = true
+      this.collect = collect
+    },
+    updatePlaySong(song) {
+      this.playSong = true
+      this.playCollect = false
+      this.song = song
+    }
   },
-  updatePlaySong(song) {
-      this.playSong = true;
-      this.playCollect = false;
-      this.song = song;
+  components: {
+    Collect,
+    Tournament,
+    Song
   }
-}, 
-components: {
-  Collect,
-  Tournament,
-  Song
-},
 }
 </script>

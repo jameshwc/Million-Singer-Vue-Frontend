@@ -9,12 +9,14 @@ const routes = [
   {
     path: '/TourSelect',
     name: 'TournamentSelection',
-    component: () => import('../views/TournamentSelection.vue')
+    component: () => import('../views/TournamentSelection.vue'),
+    props: true,
   },
   {
     path: '/Tour/:TourID',
-    name: 'Tournament',
-    component: () => import('../views/Game.vue')
+    name: 'Game',
+    component: () => import('../views/Game.vue'),
+    props: true,
   },
   {
     path: '/Edit',

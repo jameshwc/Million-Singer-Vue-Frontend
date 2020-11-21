@@ -68,7 +68,7 @@ methods: {
     Tournament(){
         this.$router.push({ path: '/Edit/Tournament' })
     },
-    Submit: function(e){
+    Submit: function(){
         var genres = ""
         for (var genre in this.songGenres) {
             if(this.songGenres[genre] === true) {
@@ -95,7 +95,10 @@ methods: {
             file_type: filetype,
         }
         console.log(this.subtitleLangTranslate, JSON.stringify(obj), this.subtitles);
-        e.preventDefault();
+        fetch("http://ms.csie.org/api/game/songs/new", JSON.stringify(obj)).then(data => data.json())
+        .then( data => {
+            console.log(data);
+        })
     },
     Check(){
         this.hasChecked = true;

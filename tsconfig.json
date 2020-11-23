@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+      "node_modules/@types"
+  ],
     "target": "esnext",
     "module": "esnext",
     "strict": true,
+    "strictNullChecks": false,
     "jsx": "preserve",
     "noImplicitThis": true,
     "importHelpers": true,
@@ -15,7 +19,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "youtube"
     ],
     "paths": {
       "@/*": [

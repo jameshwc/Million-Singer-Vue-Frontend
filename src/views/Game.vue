@@ -25,7 +25,7 @@ export default defineComponent({
     const playCollect = ref(false)
     const playSong = ref(false)
     var collection =  ref({})
-    let song: ISong[] = []
+    var song = ref({})
     const updatePlayCollect = function (c: Ref) {
       playCollect.value = true
       collection.value = c.value
@@ -34,7 +34,8 @@ export default defineComponent({
     const updatePlaySong = function (s: Ref) {
       playSong.value = true
       playCollect.value = false
-      song = s.value
+      song.value = s.value
+      console.log("123", song.value);
     }
     return {
       playCollect,

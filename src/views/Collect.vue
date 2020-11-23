@@ -12,30 +12,32 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { ICollect, ISong } from '../util/interface'
+import { ICollect, ISong, ISongWithLyrics } from '../util/interface'
 export default defineComponent({
   name: 'Collect',
   props: {
-      collect: Object,
+      collect: {
+        type: Object as () => ICollect,
+      }
   },
   setup(props, context) {
     const fetchSong = function (id: number) {
       fetch('http://ms.csie.org/api/game/songs/' + id)
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log(responseJson.data)
-          context.emit('play', responseJson.data)
+          const song = ref<ISongWithLyrics>()
+          song.value = responseJson.data
+          context.emit('play', song)
         })
     }
     let songs = ref<ISong[]>()
     onMounted(() => {
-        console.log("hello, ", props.collect)
         songs.value = props.collect?.songs;
     });
     return {
         fetchSong,
         songs,
-        props
+        props,
     }
   },
 })

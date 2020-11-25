@@ -27,10 +27,10 @@ jobs:
         echo "${{ secrets.SSH_KEY }}" >> .ssh/rsa
         chmod 700 .ssh/rsa
         sftp -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} "
+        rm -rf million-singer/dist
         put -r dist million-singer/
         "
         ssh -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} -tt "
         cd million-singer
         docker-build -d --build
-        rm -rf dist
         "

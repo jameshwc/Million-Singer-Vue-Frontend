@@ -1,3 +1,12 @@
+export interface IPostTour {
+    collects: number[]
+}
+
+export interface IPostCollect {
+    title: string
+    songs: number[]
+}
+
 export interface ICollect {
     id: number
     title: string
@@ -9,6 +18,8 @@ export interface ISong {
     video_id: string
     name: string
     singer: string
+    language?: string
+    genre?: string
 }
 
 export interface ISongWithLyrics extends ISong{
@@ -25,6 +36,17 @@ export interface ILyric {
     end_time: number
 }
 
+export interface ISubtitle {
+    lang_code: string
+    lang_translated: string
+    base_url: string
+}
+
+export interface ILine {
+    _start: string
+    _dur: string
+    __text: string
+}
 // export class Collect implements ICollect {
 //     id: number
 //     title: string

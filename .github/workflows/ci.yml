@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - master
+      - dev
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        
+    - name: Install and Build
+      run: |
+        npm install
+        npm run build
+     
+    - name: Deploy
+      run: |
+        mkdir -p .ssh
+        chmod 700 .ssh
+        echo "${{ secrets.SSH_KEY }}" >> .ssh/rsa
+        chmod 700 .ssh/rsa
+        sftp -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} "
+        rm -rf million-singer/dist
+        put -r dist million-singer/
+        "
+        ssh -o StrictHostKeyChecking=no -i .ssh/rsa ${{ secrets.HOST }} -tt "
+        cd million-singer
+        docker-compose up -d --build
+        "
